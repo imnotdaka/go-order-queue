@@ -24,11 +24,7 @@ func (mq *MessageQueue) Publish(data *Order, stop <-chan bool) {
 		log.Println("stopping")
 		return
 	case mq.Messages <- data:
-		log.Println("message sent", mq.Name, <-mq.Read())
+		log.Println("message sent", mq.Name)
 		return
 	}
-}
-
-func (mq *MessageQueue) Read() <-chan *Order {
-	return mq.Messages
 }

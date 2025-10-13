@@ -19,8 +19,15 @@ func OrderHandler(queue *order.MessageQueue, producer *producer.Producer, stop <
 		}
 		order.CreatedAt = time.Now()
 
-		producer.Produce(&order, stop)
+		go producer.Produce(&order, stop)
 
 		c.JSON(http.StatusOK, gin.H{"message": "order created"})
+	}
+}
+
+func Stop(stop chan<- bool) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		stop <- true
+		c.JSON(http.StatusOK, gin.H{"message": "stopped"})
 	}
 }
